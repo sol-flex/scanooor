@@ -93,7 +93,11 @@ element.addEventListener("click", callStart3);
 
 async function callStart3(mintAddress) {
   event.preventDefault()
-
+  document.getElementsByClassName("nft_card")[0].style.borderColor = "white"
+  document.getElementsByClassName("nft_mint_account")[0].style.borderColor = "white"
+  document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
+  document.getElementsByClassName("metadata_account")[0].style.borderColor = "white"
+  document.getElementsByClassName("edition_account")[0].style.borderColor = "white"
 
   var collection_symbol= document.getElementById("collection").value;
 
@@ -112,6 +116,8 @@ async function callStart3(mintAddress) {
 
     const nftImg = document.getElementById("nft_img")
     nftImg.setAttribute("src", data.json.image)
+    nftImg.style.width = "200px"
+    nftImg.style.height = "200px"
 
     const nftName = document.getElementById("nft_name")
     nftName.innerText = data.json.name

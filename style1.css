@@ -93,8 +93,7 @@ img {
 }
 
 #nft_img {
-  width: 200px;
-  height: 200px;
+
 }
 
 .nft_card {
@@ -104,7 +103,7 @@ img {
   margin-top: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  border: 1px solid white;
+  border: 1px solid black;
   border-radius: 2%
 }
 
@@ -113,7 +112,7 @@ img {
   margin-left: 10px;
   margin-right: 10px;
   padding: 15px;
-  border: 1px solid white;
+  border: 1px solid black;
   border-radius: 2%
 }
 
