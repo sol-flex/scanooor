@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="style1.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<meta charset="UTF-8">
+<title>Embedded Style Sheet</title>
+<style>
+ 
+</style>
+</head>
+<body>
+  <div class="header">
+    <img class="logo" src="static/thugraffes_logo.png" alt="Avatar" width="35" height="35">
+    <h1 class="title">Scanooor</h1>   
+  </div>
+  <div class="search_bar_container">
+    <label for="collection" id="collection_symbol_text"></label>
+    <input type="text" id="collection" name="collection" placeholder="mint address">
+    <button id="submit_button">
+      Submit <i id="loading_wheel"></i>
+    </button>
+  </div>
+  <div id="output">
+    <div class="nft_card">
+        <img id="nft_img" />
+        <div id="nft_card_data">
+            <h3 id="nft_name" class="nft_card_data_item"></h3>
+            <p id="nft_type" class="nft_card_data_item"></p>
+            <p id="nft_collection" class="nft_card_data_item"></p>
+            <p id="nft_protocol" class="nft_card_data_item"></p>
+            <p id="nft_state" class="nft_card_data_item"></p>
+            <p id="nft_delegate" class="nft_card_data_item"></p>
+        </div>
+    </div>
+    <div class="nft_mint_account">
+        <h3 id="nft_mint_account_title"class="nft_card_data_item"></h3>
+        <p id="nft_mint_address"class="nft_card_data_item"></p>
+        <p id="nft_mint_decimals"class="nft_card_data_item"></p>
+        <p id="nft_mint_supply"class="nft_card_data_item"></p>
+        <p id="nft_mint_update_authority"class="nft_card_data_item"></p>
+        <p id="nft_mint_mint_authority"class="nft_card_data_item"></p>
+        <p id="nft_mint_freeze_authority"class="nft_card_data_item"></p>
+    </div>
+    <div class="nft_ata">
+        <h3 id="nft_ata_title"class="nft_card_data_item"></h3>
+        <p id="nft_ata_address"class="nft_card_data_item"></p>
+        <p id="nft_ata_owner"class="nft_card_data_item"></p>
+        <p id="nft_ata_delegate"class="nft_card_data_item"></p>
+        <p id="nft_ata_delegated_amount"class="nft_card_data_item"></p>
+    </div>
+  </div>
+  <div id="output_2">
+    <div class="metadata_account">
+        <h3 id="metadata_account_title"class="nft_card_data_item"></h3>
+        <p id="metadata_account_address"class="nft_card_data_item"></p>
+        <p id="metadata_account_update_authority"class="nft_card_data_item"></p>
+        <p id="metadata_account_name"class="nft_card_data_item"></p>
+        <p id="metadata_account_symbol"class="nft_card_data_item"></p> 
+        <p id="metadata_account_uri"class="nft_card_data_item"></p> 
+        <p id="metadata_account_seller_fee"class="nft_card_data_item"></p>
+        <div id="metadata_account_creators"class="nft_card_data_item">
+            <p id="creators_title"></p>
+        </div>
+        <p id="metadata_account_primary_sale_happened"class="nft_card_data_item"></p> 
+        <p id="metadata_account_is_mutable"class="nft_card_data_item"></p> 
+        <p id="metadata_account_edition_nonce"class="nft_card_data_item"></p> 
+        <p id="metadata_account_token_standard"class="nft_card_data_item"></p> 
+        <p id="metadata_account_collection"class="nft_card_data_item"></p> 
+        <p id="metadata_account_uses"class="nft_card_data_item"></p> 
+        <p id="metadata_account_collection_details"class="nft_card_data_item"></p> 
+    </div>
+    <div class="edition_account">
+        <h3 id="edition_account_title"class="nft_card_data_item"></h3>
+        <p id="edition_account_address"class="nft_card_data_item"></p>
+        <p id="edition_account_supply"class="nft_card_data_item"></p>
+        <p id="edition_account_max_supply"class="nft_card_data_item"></p>
+        <p id="edition_account_number"class="nft_card_data_item"></p> 
+        <p id="edition_account_parent"class="nft_card_data_item"></p> 
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript" src="testshit.js">
+
+</script>
+
+<script type="text/javascript">
+  
+const element = document.getElementById("submit_button");
+element.addEventListener("click", callStart3);
+
+async function callStart3(mintAddress) {
+  event.preventDefault()
+
+
+  var collection_symbol= document.getElementById("collection").value;
+
+  var url = `http://localhost:5000/scanooor/${collection_symbol}`
+
+  console.log(url)
+
+  fetch(url).then(function (response) {
+
+    return response.json()
+
+  }).then(async (data) => {
+    console.log(data)
+
+    // NFT card
+
+    const nftImg = document.getElementById("nft_img")
+    nftImg.setAttribute("src", data.json.image)
+
+    const nftName = document.getElementById("nft_name")
+    nftName.innerText = data.json.name
+
+    const nftType = document.getElementById("nft_type")
+    nftType.innerText = `Type: ${data.type.toUpperCase()}`
+
+    const nftState = document.getElementById("nft_state")
+    nftState.innerText = `State: ${data.ataState}`
+
+    const nftProtocol = document.getElementById("nft_protocol")
+    nftProtocol.innerText = data.isOCP === true? "Protocol: OCP" : "Protocol: Metaplex"
+
+    const nftCollection = document.getElementById("nft_collection")
+    nftCollection.innerText = data.collection === null? "Collection: N/A" : `Collection: ${data.collection}`
+
+    const nftDelegate = document.getElementById("nft_delegate")
+    nftDelegate.innerText = data.ataDelegateAddress === null ? "Delegate: N/A" : `Delegate: ${data.ataDelegateAddress}`
+
+    // Mint account
+
+    const nftMintAccountTitle = document.getElementById("nft_mint_account_title")
+    nftMintAccountTitle.innerText = "Mint Account"
+
+    const nftMintAddress = document.getElementById("nft_mint_address")
+    nftMintAddress.innerText = `Address: ${data.nft.address}`
+
+    const nftMintDecimals = document.getElementById("nft_mint_decimals")
+    nftMintDecimals.innerText = `Decimals: ${data.decimals}`
+
+    const nftMintSupply = document.getElementById("nft_mint_supply")
+    nftMintSupply.innerText = `Supply: ${parseInt(data.supply, 16)}`
+
+    const nftMintAuthority = document.getElementById("nft_mint_mint_authority")
+    nftMintAuthority.innerText = `Mint Authority: ${data.mintAuthority}`
+
+    const nftFreezeAuthority = document.getElementById("nft_mint_freeze_authority")
+    nftFreezeAuthority.innerText = `Freeze Authority: ${data.freezeAuthority}`
+
+    // Associated Token Account 
+
+    const nftAtaTitle = document.getElementById("nft_ata_title")
+    nftAtaTitle.innerText = "Associated Token Account"
+
+    const nftAtaAddress = document.getElementById("nft_ata_address")
+    nftAtaAddress.innerText = `Address: ${data.ataAddress}`
+
+    const nftAtaDelegate = document.getElementById("nft_ata_delegate")
+    nftAtaDelegate.innerText = `Delegate: ${data.ataDelegateAddress}`
+
+    const nftAtaDelegatedAmount = document.getElementById("nft_ata_delegated_amount")
+    nftAtaDelegatedAmount.innerText = `Delegated Amount: ${data.ataDelegatedAmount}`
+
+    const nftAtaOwner = document.getElementById("nft_ata_owner")
+    nftAtaOwner.innerText = `Owner: ${data.ataOwnerAddress}`
+
+    // Edition Account
+
+    if(data.nft.edition != null) {
+        if(data.nft.edition.isOriginal === true) {
+            const editionAccountNumber = document.getElementById("edition_account_number")
+            editionAccountNumber.innerText = " "
+
+            const editionAccountParent = document.getElementById("edition_account_parent")
+            editionAccountParent.innerText = " "
+            
+            const editionAccountTitle = document.getElementById("edition_account_title")
+            editionAccountTitle.innerText = data.nft.edition.isOriginal === false ? "Edition Account" : "Master Edition Account"
+
+            const editionAccountAddress = document.getElementById("edition_account_address")
+            editionAccountAddress.innerText = `Address: ${data.nft.edition.address}`
+
+            const editionAccountSupply = document.getElementById("edition_account_supply")
+            editionAccountSupply.innerText = `Supply: ${parseInt(data.nft.edition.supply, 16)}`
+
+            const editionAccountMaxSupply = document.getElementById("edition_account_max_supply")
+            editionAccountMaxSupply.innerText = `Max Supply: ${parseInt(data.nft.edition.maxSupply, 16)}`
+        } else {
+            const editionAccountSupply = document.getElementById("edition_account_supply")
+            editionAccountSupply.innerText = " "
+
+            const editionAccountMaxSupply = document.getElementById("edition_account_max_supply")
+            editionAccountMaxSupply.innerText = " "
+
+            const editionAccountTitle = document.getElementById("edition_account_title")
+            editionAccountTitle.innerText = data.nft.edition.isOriginal === false ? "Edition Account" : "Master Edition Account"
+
+            const editionAccountAddress = document.getElementById("edition_account_address")
+            editionAccountAddress.innerText = `Address: ${data.nft.edition.address}`
+
+            const editionAccountNumber = document.getElementById("edition_account_number")
+            editionAccountNumber.innerText = `Number: ${parseInt(data.nft.edition.number, 16)}`
+
+            const editionAccountParent = document.getElementById("edition_account_parent")
+            editionAccountParent.innerText = `Parent: ${data.nft.edition.parent}`
+        }
+    }
+
+    // Metadata Account
+
+    const metadataAccountTitle = document.getElementById("metadata_account_title")
+    metadataAccountTitle.innerText = "Metadata Account"
+
+    const metadataAccountAddress = document.getElementById("metadata_account_address")
+    metadataAccountAddress.innerText = `Address: ${data.nft.metadataAddress}`
+
+    const metadataUpdateAuthority = document.getElementById("metadata_account_update_authority")
+    metadataUpdateAuthority.innerText = `Update Authority: ${data.nft.updateAuthorityAddress}`
+
+    const metadataName = document.getElementById("metadata_account_name")
+    metadataName.innerText = `Name: ${data.nft.name}`
+
+    const metadataSymbol = document.getElementById("metadata_account_symbol")
+    metadataSymbol.innerText = `Symbol: ${data.nft.symbol}`
+
+    const metadataURI = document.getElementById("metadata_account_uri")
+    metadataURI.innerText = `URI: ${data.nft.uri}`
+
+    const metadataSellerFee = document.getElementById("metadata_account_seller_fee")
+    metadataSellerFee.innerText = `Seller Fee Basis Points: ${data.nft.sellerFeeBasisPoints}`
+
+    const metadataSellerCreators = document.getElementById("metadata_account_creators")
+    document.getElementById("creators_title").innerText = "Creators: "
+    const creators = [...document.getElementsByClassName("creator_address")]
+    creators.forEach((creator) => {creator.remove()})
+    data.nft.creators.forEach((creator) => {
+        const pElem = document.createElement("p")
+        pElem.innerText = `      ${creator.address} - Share: ${creator.share} - Verified: ${creator.verified} `
+        pElem.classList.add("creator_address")
+        metadataSellerCreators.appendChild(pElem)
+
+    })
+
+    const metadataPrimarySaleHappened = document.getElementById("metadata_account_primary_sale_happened")
+    metadataPrimarySaleHappened.innerText = `Primary Sale Happened: ${data.nft.primarySaleHappened}`
+
+    const metadataisMutable = document.getElementById("metadata_account_is_mutable")
+    metadataisMutable.innerText = `Is Mutable: ${data.nft.isMutable}`
+
+    const metadataCollection = document.getElementById("metadata_account_collection")
+    metadataCollection.innerText = `Collection: ${data.collection} - Verified: ${data.collectionVerified}`
+
+
+  }).catch(function(err) {
+
+    console.warn('Something went wrong.', err);
+
+    var element = document.getElementById("loading_wheel");
+    element.className = "";
+
+  })
+}
+
+</script>
+</html>
