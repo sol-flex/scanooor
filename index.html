@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style1.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <meta charset="UTF-8">
@@ -60,8 +60,8 @@
         <p id="metadata_account_symbol"class="nft_card_data_item"></p> 
         <p id="metadata_account_uri"class="nft_card_data_item"></p> 
         <p id="metadata_account_seller_fee"class="nft_card_data_item"></p>
-        <div id="metadata_account_creators"class="nft_card_data_item">
-            <p id="creators_title"></p>
+        <div id="metadata_account_creators"class="nft_card_data_item nft_card_data_item_creators">
+            <p id="creators_title" class="creators_title"></p>
         </div>
         <p id="metadata_account_primary_sale_happened"class="nft_card_data_item"></p> 
         <p id="metadata_account_is_mutable"class="nft_card_data_item"></p> 
@@ -79,6 +79,9 @@
         <p id="edition_account_number"class="nft_card_data_item"></p> 
         <p id="edition_account_parent"class="nft_card_data_item"></p> 
     </div>
+    <div class="off_chain_metadata" id="off_chain_metadata_container">
+
+    </div>
   </div>
 
 </body>
@@ -93,6 +96,24 @@ element.addEventListener("click", callStart3);
 
 async function callStart3(mintAddress) {
   event.preventDefault()
+
+  const nftCardDataItems = [...document.getElementsByClassName("nft_card_data_item")]
+  nftCardDataItems.forEach((item) => {
+    if(![...item.classList].includes("nft_card_data_item_creators")) {
+      item.innerText = " "
+    }
+  })
+
+  const creatorAddresses = [...document.getElementsByClassName("creator_address")]
+  creatorAddresses.forEach((item) => {
+    item.innerText = " "
+  })
+
+  const creatorTitle = [...document.getElementsByClassName("creators_title")]
+  creatorTitle.forEach((item) => {
+    item.innerText = " "
+  })
+
   document.getElementsByClassName("nft_card")[0].style.borderColor = "white"
   document.getElementsByClassName("nft_mint_account")[0].style.borderColor = "white"
   document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
@@ -101,7 +122,7 @@ async function callStart3(mintAddress) {
 
   var collection_symbol= document.getElementById("collection").value;
 
-  var url = `https://detectooor.herokuapp.com/scanooor/${collection_symbol}`
+  var url = `http://localhost:5000/scanooor/${collection_symbol}`
 
   console.log(url)
 
@@ -129,7 +150,15 @@ async function callStart3(mintAddress) {
     nftState.innerText = `State: ${data.ataState}`
 
     const nftProtocol = document.getElementById("nft_protocol")
-    nftProtocol.innerText = data.isOCP === true? "Protocol: OCP" : "Protocol: Metaplex"
+    if(data.isOCP === true) {
+      nftProtocol.innerText = "Protocol: OCP"
+    } else if (data.isCardinal === true) {
+      nftProtocol.innerText = "Protocol: Cardinal Labs"
+    } else if (data.isMIP1 === true) {
+      nftProtocol.innerText = "Protocol: MIP-1"
+    } else {
+      nftProtocol.innerText = "Protocol: Metaplex"
+    }
 
     const nftCollection = document.getElementById("nft_collection")
     nftCollection.innerText = data.collection === null? "Collection: N/A" : `Collection: ${data.collection}`
@@ -259,6 +288,9 @@ async function callStart3(mintAddress) {
 
     const metadataCollection = document.getElementById("metadata_account_collection")
     metadataCollection.innerText = `Collection: ${data.collection} - Verified: ${data.collectionVerified}`
+
+    // off-chain metadata 
+
 
 
   }).catch(function(err) {

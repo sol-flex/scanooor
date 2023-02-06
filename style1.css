@@ -93,7 +93,6 @@ img {
 }
 
 #nft_img {
-
 }
 
 .nft_card {
@@ -113,7 +112,8 @@ img {
   margin-right: 10px;
   padding: 15px;
   border: 1px solid black;
-  border-radius: 2%
+  border-radius: 2%;
+  flex: 1
 }
 
 .nft_data {
