@@ -83,6 +83,19 @@
 
     </div>
   </div>
+  <div id="output_3">
+    <div class="transactions">
+      <h3 id="transactions_title"class="nft_card_data_item">Transactions</h3>
+      <table id="txns_table">
+        <tr>
+          <th>Signature</th>
+          <th>Block</th>
+          <th>Confirmation Status</th>
+        </tr>
+
+      </table>
+    </div>
+  </div>
 
 </body>
 <script type="text/javascript" src="testshit.js">
@@ -119,10 +132,11 @@ async function callStart3(mintAddress) {
   document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
   document.getElementsByClassName("metadata_account")[0].style.borderColor = "white"
   document.getElementsByClassName("edition_account")[0].style.borderColor = "white"
+  document.getElementsByClassName("transactions")[0].style.borderColor = "white"
 
   var collection_symbol= document.getElementById("collection").value;
 
-  var url = `https://detectooor.herokuapp.com/scanooor/${collection_symbol}`
+  var url = `http://localhost:5000/scanooor/${collection_symbol}`
 
   console.log(url)
 
@@ -291,6 +305,31 @@ async function callStart3(mintAddress) {
 
     // off-chain metadata 
 
+    // Transactions
+
+    const txnsTitle = document.getElementById("transactions_title")
+    txnsTitle.innerText = "Transactions"
+
+    data.txns.forEach((txn) => {
+      const txn_tr = document.createElement("tr")
+      const txn_td_signature = document.createElement("td")
+      txn_td_signature.innerText = `${txn.signature.slice(0,21)}...`
+
+      const txn_td_block = document.createElement("td")
+      txn_td_block.innerText = `${txn.blockTime}`
+
+      const txn_td_confirmation_status = document.createElement("td")
+      txn_td_confirmation_status.innerText = `${txn.confirmationStatus}`
+
+      txn_tr.append(txn_td_signature)
+      txn_tr.append(txn_td_block)
+      txn_tr.append(txn_td_confirmation_status)
+
+      const txnsTable = document.getElementById("txns_table")
+
+      txnsTable.append(txn_tr)
+
+    })
 
 
   }).catch(function(err) {

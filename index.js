@@ -3,6 +3,8 @@ const Solana = require("@solana/web3.js")
 const Anchor = require("@project-serum/anchor")
 const axios = require("axios");
 const SPL = require("@solana/spl-token")
+const msgpack = require('@msgpack/msgpack')
+const MIP1 = require("@metaplex-foundation/mpl-token-auth-rules")
 
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID = new Solana.PublicKey(
     'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
@@ -135,19 +137,19 @@ async function getAccountInfo(pubKey) {
             "params": [
               `${pubKey.toString()}`,
               {
-                "encoding": "jsonParsed"
+                "encoding": "base64"
               }
             ]
           }
       }) 
 
-      console.log(response.data.result);
+      // console.log(response);
       //console.log("Token delegate: ", response.data.result.value.data.parsed.info.delegate)
       //console.log("Delegated amount: ", response.data.result.value.data.parsed.info.delegatedAmount.amount)
       // console.log("State of token account: ", response.data.result.value.data.parsed.info.state)
 
 
-      return response.data.result
+      return response
 
 }
 
@@ -213,13 +215,32 @@ async function getTokenLargestAccounts(mintAddress) {
     return new Solana.PublicKey(largestAccountInfo.value.data.parsed.info.owner);
 }
 
+async function decodeRulesetData(pubKey) {
+    const accountInfo = await getAccountInfo(new Solana.PublicKey("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52"))
+    const data = Buffer.from(accountInfo?.data.result.value.data)
+    const header = MIP1.getHeader(data); //works. output: { key: 0, revMapVersionLocation: <BN: 0> }
+    const revmap = MIP1.getRevisionMapV1(accountInfo.data); // doesn't work. Error: RangeError [ERR_BUFFER_OUT_OF_BOUNDS]: Attempt to access memory outside buffer bounds
+
+
+    console.log(header);
+
+}
+
+async function getTransactions(mintAddress, numTx) {
+
+    let transactionList = await connection.getSignaturesForAddress(mintAddress, {limit:numTx});
+    console.log(transactionList)
+}
+
+// decodeRulesetData(new Solana.PublicKey("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52"))
+
 // getOwnerWalletFromMint(mintAddress);
 
 // findAssociatedTokenAddress(new Solana.PublicKey("1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix"), new Solana.PublicKey("5KBbEfkCQQ3qwaRKJi1pjUVE2oGwASTrWco8Tw7WTeX8"))
 
 // getAccountInfo(new Solana.PublicKey("7evQhBswiztNd6HLvNWsh1Ekc3fmyvQGnL82uDepSMbw"));
 
-findByMint(new Solana.PublicKey("24hdE64cBuzWJq8KSGgKvgSBJz3TpE2Mt8AfC7NCf2Kk"));
+// findByMint(new Solana.PublicKey("24hdE64cBuzWJq8KSGgKvgSBJz3TpE2Mt8AfC7NCf2Kk"));
 
 // getAccountInfo(new Solana.PublicKey("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52"))
 
@@ -228,3 +249,7 @@ findByMint(new Solana.PublicKey("24hdE64cBuzWJq8KSGgKvgSBJz3TpE2Mt8AfC7NCf2Kk"))
 // getTokenLargestAccounts(new Solana.PublicKey("2ZkGVeppRLQuG6GpBLLfsQiwJna9p1jzhpF8Wr3r9MRQ"))
 
 // findMintStatePk(new Solana.PublicKey("49CHrm1Vu9z3tvGGAXAxeBni8f7gwsui2kUHHJrMeipc"))
+
+// MIP1.findRuleSetPDA("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52")
+
+getTransactions(new Solana.PublicKey("HgRrsqDwAJXhPNJrVDy1NrMwF8SHZYCXdsCgzqD43LW"))
