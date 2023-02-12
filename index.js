@@ -216,23 +216,22 @@ async function getTokenLargestAccounts(mintAddress) {
 }
 
 async function decodeRulesetData(pubKey) {
-    const accountInfo = await getAccountInfo(new Solana.PublicKey("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52"))
-    const data = Buffer.from(accountInfo?.data.result.value.data)
-    const header = MIP1.getHeader(data); //works. output: { key: 0, revMapVersionLocation: <BN: 0> }
-    const revmap = MIP1.getRevisionMapV1(accountInfo.data); // doesn't work. Error: RangeError [ERR_BUFFER_OUT_OF_BOUNDS]: Attempt to access memory outside buffer bounds
-
-
-    console.log(header);
+    const accountInfo = await getAccountInfo(new Solana.PublicKey("eBJLFYPxJmMGKuFwpDWkzxZeUrad92kZRC5BJLpzyT9"))
+    console.log(accountInfo.data.result)
+    const data = Buffer.from(accountInfo?.data.result.value.data[0], "base64")
+    console.log(data)
+    const blah = MIP1.getLatestRuleSet(data)
+    console.log(blah)
 
 }
 
 async function getTransactions(mintAddress, numTx) {
 
-    let transactionList = await connection.getSignaturesForAddress(mintAddress, {limit:numTx});
+    let transactionList = await connection.getSignaturesForAddress(mintAddress, { limit:numTx });
     console.log(transactionList)
 }
 
-// decodeRulesetData(new Solana.PublicKey("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52"))
+decodeRulesetData(new Solana.PublicKey("eBJLFYPxJmMGKuFwpDWkzxZeUrad92kZRC5BJLpzyT9"))
 
 // getOwnerWalletFromMint(mintAddress);
 
@@ -252,4 +251,4 @@ async function getTransactions(mintAddress, numTx) {
 
 // MIP1.findRuleSetPDA("AZ2HiSsD7G1gEt9stCV2ZdJprsLUKMTacwkj67YjG52")
 
-getTransactions(new Solana.PublicKey("HgRrsqDwAJXhPNJrVDy1NrMwF8SHZYCXdsCgzqD43LW"))
+// getTransactions(new Solana.PublicKey("HgRrsqDwAJXhPNJrVDy1NrMwF8SHZYCXdsCgzqD43LW"))
