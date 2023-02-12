@@ -34,25 +34,24 @@
             <p id="nft_delegate" class="nft_card_data_item"></p>
         </div>
     </div>
-    <div class="nft_mint_account">
-        <h3 id="nft_mint_account_title"class="nft_card_data_item"></h3>
-        <p id="nft_mint_address"class="nft_card_data_item"></p>
-        <p id="nft_mint_decimals"class="nft_card_data_item"></p>
-        <p id="nft_mint_supply"class="nft_card_data_item"></p>
-        <p id="nft_mint_update_authority"class="nft_card_data_item"></p>
-        <p id="nft_mint_mint_authority"class="nft_card_data_item"></p>
-        <p id="nft_mint_freeze_authority"class="nft_card_data_item"></p>
-    </div>
     <div class="nft_ata">
-        <h3 id="nft_ata_title"class="nft_card_data_item"></h3>
-        <p id="nft_ata_address"class="nft_card_data_item"></p>
-        <p id="nft_ata_owner"class="nft_card_data_item"></p>
-        <p id="nft_ata_delegate"class="nft_card_data_item"></p>
-        <p id="nft_ata_delegated_amount"class="nft_card_data_item"></p>
-    </div>
+      <h3 id="nft_ata_title"class="nft_card_data_item"></h3>
+      <p id="nft_ata_address"class="nft_card_data_item"></p>
+      <p id="nft_ata_owner"class="nft_card_data_item"></p>
+      <p id="nft_ata_delegate"class="nft_card_data_item"></p>
+      <p id="nft_ata_delegated_amount"class="nft_card_data_item"></p>
+  </div>
   </div>
   <div id="output_2">
-    <div class="metadata_account">
+    <div id="ant-tabs-container">
+      <div class="ant-tabs-tab ant-tabs-active" id="metadata_account_ant_tab"><h3 class="ant-tabs-title">Metadata Account</h3></div>
+      <div class="ant-tabs-tab" id="nft_mint_account_ant_tab"><h3 class="ant-tabs-title">Mint Account</h3></div>
+      <div class="ant-tabs-tab" id="edition_account_ant_tab"><h3 class="ant-tabs-title">Edition Account</h3></div>
+      <div class="ant-tabs-tab" id="off_chain_json_ant_tab"><h3 class="ant-tabs-title">Off-chain JSON</h3></div>
+      <div class="ant-tabs-tab" id="transactions_ant_tab"><h3 class="ant-tabs-title">Transactions</h3></div>
+
+    </div>
+    <div class="metadata_account active_account_card">
         <h3 id="metadata_account_title"class="nft_card_data_item"></h3>
         <p id="metadata_account_address"class="nft_card_data_item"></p>
         <p id="metadata_account_update_authority"class="nft_card_data_item"></p>
@@ -71,7 +70,16 @@
         <p id="metadata_account_uses"class="nft_card_data_item"></p> 
         <p id="metadata_account_collection_details"class="nft_card_data_item"></p> 
     </div>
-    <div class="edition_account">
+    <div class="nft_mint_account" style="display:none">
+      <h3 id="nft_mint_account_title"class="nft_card_data_item"></h3>
+      <p id="nft_mint_address"class="nft_card_data_item"></p>
+      <p id="nft_mint_decimals"class="nft_card_data_item"></p>
+      <p id="nft_mint_supply"class="nft_card_data_item"></p>
+      <p id="nft_mint_update_authority"class="nft_card_data_item"></p>
+      <p id="nft_mint_mint_authority"class="nft_card_data_item"></p>
+      <p id="nft_mint_freeze_authority"class="nft_card_data_item"></p>
+    </div>
+    <div class="edition_account" style="display:none">
         <h3 id="edition_account_title"class="nft_card_data_item"></h3>
         <p id="edition_account_address"class="nft_card_data_item"></p>
         <p id="edition_account_supply"class="nft_card_data_item"></p>
@@ -79,12 +87,11 @@
         <p id="edition_account_number"class="nft_card_data_item"></p> 
         <p id="edition_account_parent"class="nft_card_data_item"></p> 
     </div>
-    <div class="off_chain_metadata" id="off_chain_metadata_container">
-
+    <div class="off_chain_json" style="display:none">
+      <pre id="off_chain_json_pre_container">
+      </pre>
     </div>
-  </div>
-  <div id="output_3">
-    <div class="transactions">
+    <div class="transactions" style="display:none">
       <h3 id="transactions_title"class="nft_card_data_item">Transactions</h3>
       <table id="txns_table">
         <tr>
@@ -92,7 +99,6 @@
           <th>Block</th>
           <th>Confirmation Status</th>
         </tr>
-
       </table>
     </div>
   </div>
@@ -106,6 +112,38 @@
   
 const element = document.getElementById("submit_button");
 element.addEventListener("click", callStart3);
+
+const antTabs = [...document.getElementsByClassName("ant-tabs-tab")]
+antTabs.forEach((antTab) => {
+  antTab.addEventListener("click", onClickAntTab)
+})
+
+async function onClickAntTab(event) {
+  let accountID = ""
+
+  const activeTab = document.getElementsByClassName("ant-tabs-active")
+  activeTab[0].classList.remove("ant-tabs-active")
+
+  if(event.target.classList.contains("ant-tabs-title")) {
+    event.target.parentElement.classList.add("ant-tabs-active")
+    accountID = event.target.parentElement.id.split("_ant_tab")[0]
+
+  } else if (event.target.classList.contains("ant-tabs-tab")) {
+    event.target.classList.add("ant-tabs-active")
+    accountID = event.target.id.split("_ant_tab")[0]
+
+  }
+
+  const currentActiveCard = document.getElementsByClassName("active_account_card")[0]
+  currentActiveCard.style.display = "none"
+  currentActiveCard.classList.remove("active_account_card")
+  console.log(accountID)
+  const accountToDisplay = document.getElementsByClassName(accountID)[0]
+  console.log(accountToDisplay)
+  accountToDisplay.style.display = "block"
+  accountToDisplay.classList.add("active_account_card")
+}
+
 
 async function callStart3(mintAddress) {
   event.preventDefault()
@@ -127,12 +165,11 @@ async function callStart3(mintAddress) {
     item.innerText = " "
   })
 
-  document.getElementsByClassName("nft_card")[0].style.borderColor = "white"
-  document.getElementsByClassName("nft_mint_account")[0].style.borderColor = "white"
-  document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
-  document.getElementsByClassName("metadata_account")[0].style.borderColor = "white"
-  document.getElementsByClassName("edition_account")[0].style.borderColor = "white"
-  document.getElementsByClassName("transactions")[0].style.borderColor = "white"
+  // document.getElementsByClassName("nft_card")[0].style.borderColor = "white"
+  // document.getElementsByClassName("nft_mint_account")[0].style.borderColor = "white"
+  // document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
+  // document.getElementsByClassName("metadata_account")[0].style.borderColor = "white"
+  // document.getElementsByClassName("edition_account")[0].style.borderColor = "white"
 
   var collection_symbol= document.getElementById("collection").value;
 
@@ -305,7 +342,13 @@ async function callStart3(mintAddress) {
 
     // off-chain metadata 
 
-    // Transactions
+    const offChainJSONContainer = document.getElementById("off_chain_json_pre_container")
+
+    console.log(JSON.stringify(data.json))
+    console.log(offChainJSONContainer)
+    offChainJSONContainer.innerText = JSON.stringify(data.json, null, 2);
+
+    // transactions
 
     const txnsTitle = document.getElementById("transactions_title")
     txnsTitle.innerText = "Transactions"
