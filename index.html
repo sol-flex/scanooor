@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="style1.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <meta charset="UTF-8">
 <title>Embedded Style Sheet</title>
@@ -17,10 +18,11 @@
   </div>
   <div class="search_bar_container">
     <label for="collection" id="collection_symbol_text"></label>
-    <input type="text" id="collection" name="collection" placeholder="mint address">
+    <input type="text" id="collection" name="collection" placeholder="Search for a mint address">
     <button id="submit_button">
-      Submit <i id="loading_wheel"></i>
+      <span><i class='fa-solid fa-magnifying-glass' style='color: white'></i></span>
     </button>
+    <span><i id="loading_wheel"></i></span>
   </div>
   <div id="output">
     <div class="nft_card">
@@ -49,7 +51,7 @@
       <div class="ant-tabs-tab" id="edition_account_ant_tab"><h3 class="ant-tabs-title">Edition Account</h3></div>
       <div class="ant-tabs-tab" id="off_chain_json_ant_tab"><h3 class="ant-tabs-title">Off-chain JSON</h3></div>
       <div class="ant-tabs-tab" id="transactions_ant_tab"><h3 class="ant-tabs-title">Transactions</h3></div>
-
+      <div class="ant-tabs-tab optional_account" id="ruleset_account_ant_tab" style="display:none"><h3 class="ant-tabs-title">Ruleset Account</h3></div>
     </div>
     <div class="metadata_account active_account_card">
         <h3 id="metadata_account_title"class="nft_card_data_item"></h3>
@@ -92,7 +94,6 @@
       </pre>
     </div>
     <div class="transactions" style="display:none">
-      <h3 id="transactions_title"class="nft_card_data_item">Transactions</h3>
       <table id="txns_table">
         <tr>
           <th>Signature</th>
@@ -100,6 +101,11 @@
           <th>Confirmation Status</th>
         </tr>
       </table>
+    </div>
+    <div class="ruleset_account" style="display:none">
+      <pre id="ruleset_account_pre_container">
+
+      </pre>
     </div>
   </div>
 
@@ -148,6 +154,14 @@ async function onClickAntTab(event) {
 async function callStart3(mintAddress) {
   event.preventDefault()
 
+  var element = document.getElementById("loading_wheel");
+  element.className = "fa fa-spinner fa-spin";
+
+  const optionalAccounts = [...document.getElementsByClassName("optional_account")]
+  optionalAccounts.forEach((elem) => {
+    elem.style.display = "none";
+  })
+
   const nftCardDataItems = [...document.getElementsByClassName("nft_card_data_item")]
   nftCardDataItems.forEach((item) => {
     if(![...item.classList].includes("nft_card_data_item_creators")) {
@@ -183,6 +197,9 @@ async function callStart3(mintAddress) {
 
   }).then(async (data) => {
     console.log(data)
+
+    var element = document.getElementById("loading_wheel");
+    element.className = " ";
 
     // NFT card
 
@@ -350,13 +367,14 @@ async function callStart3(mintAddress) {
 
     // transactions
 
-    const txnsTitle = document.getElementById("transactions_title")
-    txnsTitle.innerText = "Transactions"
-
     data.txns.forEach((txn) => {
       const txn_tr = document.createElement("tr")
       const txn_td_signature = document.createElement("td")
-      txn_td_signature.innerText = `${txn.signature.slice(0,21)}...`
+      const aElement = document.createElement("a")
+      aElement.href = `https://solscan.io/tx/${txn.signature}`
+      aElement.innerText = `${txn.signature.slice(0,21)}...`
+      aElement.setAttribute("target", "_blank")
+      txn_td_signature.append(aElement)
 
       const txn_td_block = document.createElement("td")
       txn_td_block.innerText = `${txn.blockTime}`
@@ -373,6 +391,15 @@ async function callStart3(mintAddress) {
       txnsTable.append(txn_tr)
 
     })
+
+    // ruleset account
+
+    if(data.nft.programmableConfig != null && data.nft.programmableConfig != undefined) {
+      const ruleSetAntTab = document.getElementById("ruleset_account_ant_tab")
+      ruleSetAntTab.style.display = "block"
+      const ruleSetAccountContainer = document.getElementById("ruleset_account_pre_container")
+      ruleSetAccountContainer.innerText = JSON.stringify(data.ruleSetDecoded, null, 2);
+    }
 
 
   }).catch(function(err) {
