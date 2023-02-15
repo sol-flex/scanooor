@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="style1.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <meta charset="UTF-8">
 <title>Embedded Style Sheet</title>
@@ -14,18 +15,21 @@
 <body>
   <div class="header">
     <img class="logo" src="static/thugraffes_logo.png" alt="Avatar" width="35" height="35">
-    <h1 class="title">Scanooor</h1>   
+    <h1 class="title">Scanooor</h1>
   </div>
   <div class="search_bar_container">
-    <label for="collection" id="collection_symbol_text"></label>
-    <input type="text" id="collection" name="collection" placeholder="Search for a mint address">
-    <button id="submit_button">
-      <span><i class='fa-solid fa-magnifying-glass' style='color: white'></i></span>
-    </button>
-    <span><i id="loading_wheel"></i></span>
+    <div id="search_bar_title"><h3>Search for your favorite Solana NFT</h3></div>
+    <div id="search_bar_container_child">
+      <label for="collection" id="collection_symbol_text"></label>
+      <input type="text" id="collection" name="collection" placeholder="Search for a mint address">
+      <button id="submit_button">
+        <span><i class='fa-solid fa-magnifying-glass' style='color: white'></i></span>
+      </button>
+      <span><i id="loading_wheel"></i></span>
+    </div>
   </div>
   <div id="output">
-    <div class="nft_card">
+    <div class="nft_card" style="display:none">
         <img id="nft_img" />
         <div id="nft_card_data">
             <h3 id="nft_name" class="nft_card_data_item"></h3>
@@ -36,7 +40,7 @@
             <p id="nft_delegate" class="nft_card_data_item"></p>
         </div>
     </div>
-    <div class="nft_ata">
+    <div class="nft_ata" style="display:none">
       <h3 id="nft_ata_title"class="nft_card_data_item"></h3>
       <p id="nft_ata_address"class="nft_card_data_item"></p>
       <p id="nft_ata_owner"class="nft_card_data_item"></p>
@@ -46,14 +50,14 @@
   </div>
   <div id="output_2">
     <div id="ant-tabs-container">
-      <div class="ant-tabs-tab ant-tabs-active" id="metadata_account_ant_tab"><h3 class="ant-tabs-title">Metadata Account</h3></div>
-      <div class="ant-tabs-tab" id="nft_mint_account_ant_tab"><h3 class="ant-tabs-title">Mint Account</h3></div>
-      <div class="ant-tabs-tab" id="edition_account_ant_tab"><h3 class="ant-tabs-title">Edition Account</h3></div>
-      <div class="ant-tabs-tab" id="off_chain_json_ant_tab"><h3 class="ant-tabs-title">Off-chain JSON</h3></div>
-      <div class="ant-tabs-tab" id="transactions_ant_tab"><h3 class="ant-tabs-title">Transactions</h3></div>
+      <div class="ant-tabs-tab ant-tabs-active" id="metadata_account_ant_tab" style="display:none"><h3 class="ant-tabs-title">Metadata Account</h3></div>
+      <div class="ant-tabs-tab" id="nft_mint_account_ant_tab" style="display:none"><h3 class="ant-tabs-title">Mint Account</h3></div>
+      <div class="ant-tabs-tab" id="edition_account_ant_tab" style="display:none"><h3 class="ant-tabs-title">Edition Account</h3></div>
+      <div class="ant-tabs-tab" id="off_chain_json_ant_tab" style="display:none"><h3 class="ant-tabs-title">Off-chain JSON</h3></div>
+      <div class="ant-tabs-tab" id="transactions_ant_tab" style="display:none"><h3 class="ant-tabs-title">Transactions</h3></div>
       <div class="ant-tabs-tab optional_account" id="ruleset_account_ant_tab" style="display:none"><h3 class="ant-tabs-title">Ruleset Account</h3></div>
     </div>
-    <div class="metadata_account active_account_card">
+    <div class="metadata_account active_account_card account_card" style="background-color:black">
         <h3 id="metadata_account_title"class="nft_card_data_item"></h3>
         <p id="metadata_account_address"class="nft_card_data_item"></p>
         <p id="metadata_account_update_authority"class="nft_card_data_item"></p>
@@ -72,7 +76,7 @@
         <p id="metadata_account_uses"class="nft_card_data_item"></p> 
         <p id="metadata_account_collection_details"class="nft_card_data_item"></p> 
     </div>
-    <div class="nft_mint_account" style="display:none">
+    <div class="nft_mint_account account_card" style="display:none">
       <h3 id="nft_mint_account_title"class="nft_card_data_item"></h3>
       <p id="nft_mint_address"class="nft_card_data_item"></p>
       <p id="nft_mint_decimals"class="nft_card_data_item"></p>
@@ -81,7 +85,7 @@
       <p id="nft_mint_mint_authority"class="nft_card_data_item"></p>
       <p id="nft_mint_freeze_authority"class="nft_card_data_item"></p>
     </div>
-    <div class="edition_account" style="display:none">
+    <div class="edition_account account_card" style="display:none">
         <h3 id="edition_account_title"class="nft_card_data_item"></h3>
         <p id="edition_account_address"class="nft_card_data_item"></p>
         <p id="edition_account_supply"class="nft_card_data_item"></p>
@@ -89,11 +93,11 @@
         <p id="edition_account_number"class="nft_card_data_item"></p> 
         <p id="edition_account_parent"class="nft_card_data_item"></p> 
     </div>
-    <div class="off_chain_json" style="display:none">
+    <div class="off_chain_json account_card" style="display:none">
       <pre id="off_chain_json_pre_container">
       </pre>
     </div>
-    <div class="transactions" style="display:none">
+    <div class="transactions account_card" style="display:none">
       <table id="txns_table">
         <tr>
           <th>Signature</th>
@@ -102,13 +106,16 @@
         </tr>
       </table>
     </div>
-    <div class="ruleset_account" style="display:none">
+    <div class="ruleset_account optional_account account_card" style="display:none">
       <pre id="ruleset_account_pre_container">
 
       </pre>
     </div>
   </div>
 
+  <footer class="footer">
+    <div id="right-footer"><p>Built by <strong>Thugraffes.</strong> <a href="https://discord.gg/yWpWDdc976" target="_blank"><i class="fa-brands fa-discord" style="color:#5562EB"></i></a> | <a href="https://twitter.com/thugraffes" target="_blank"><i class="fa-brands fa-twitter" style="color:#1D96E8"></i></a></p></div>
+  </footer>
 </body>
 <script type="text/javascript" src="testshit.js">
 
@@ -154,6 +161,17 @@ async function onClickAntTab(event) {
 async function callStart3(mintAddress) {
   event.preventDefault()
 
+  document.getElementById("output").style.display = "none"
+  document.getElementById("output_2").style.display = "none"
+
+
+  const accountCards = [...document.getElementsByClassName("account_card")]
+  accountCards.forEach((accountCard) => {
+    accountCard.classList.remove("active_account_card")
+    accountCard.style.display = "none";
+  })
+
+
   var element = document.getElementById("loading_wheel");
   element.className = "fa fa-spinner fa-spin";
 
@@ -161,6 +179,9 @@ async function callStart3(mintAddress) {
   optionalAccounts.forEach((elem) => {
     elem.style.display = "none";
   })
+
+  document.getElementsByClassName("ant-tabs-active")[0].classList.remove("ant-tabs-active")
+  document.getElementById("metadata_account_ant_tab").classList.add("ant-tabs-active")
 
   const nftCardDataItems = [...document.getElementsByClassName("nft_card_data_item")]
   nftCardDataItems.forEach((item) => {
@@ -179,15 +200,9 @@ async function callStart3(mintAddress) {
     item.innerText = " "
   })
 
-  // document.getElementsByClassName("nft_card")[0].style.borderColor = "white"
-  // document.getElementsByClassName("nft_mint_account")[0].style.borderColor = "white"
-  // document.getElementsByClassName("nft_ata")[0].style.borderColor = "white"
-  // document.getElementsByClassName("metadata_account")[0].style.borderColor = "white"
-  // document.getElementsByClassName("edition_account")[0].style.borderColor = "white"
-
   var collection_symbol= document.getElementById("collection").value;
 
-  var url = `https://detectooor.herokuapp.com/scanooor/${collection_symbol}`
+  var url = `http://localhost:5000/scanooor/${collection_symbol}`
 
   console.log(url)
 
@@ -197,6 +212,25 @@ async function callStart3(mintAddress) {
 
   }).then(async (data) => {
     console.log(data)
+
+    document.getElementById("output").removeAttribute("style")
+    document.getElementById("output_2").removeAttribute("style")
+
+
+    document.getElementsByClassName("nft_card")[0].removeAttribute("style")
+    document.getElementsByClassName("nft_ata")[0].removeAttribute("style")
+    document.getElementById("metadata_account_ant_tab").removeAttribute("style")
+    document.getElementById("nft_mint_account_ant_tab").removeAttribute("style")
+    document.getElementById("edition_account_ant_tab").removeAttribute("style")
+    document.getElementById("off_chain_json_ant_tab").removeAttribute("style")
+    document.getElementById("transactions_ant_tab").removeAttribute("style")
+
+    document.getElementsByClassName("metadata_account")[0].removeAttribute("style")
+    document.getElementsByClassName("metadata_account")[0].classList.add("active_account_card")
+
+    document.getElementById("search_bar_title").style.display = "none";
+    document.getElementById("search_bar_container_child").style = "justify-content: flex-start"
+    document.getElementById("collection").style.width = "360px"
 
     var element = document.getElementById("loading_wheel");
     element.className = " ";

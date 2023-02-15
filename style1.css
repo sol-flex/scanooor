@@ -1,9 +1,15 @@
 body {
   background-color: black;
   color: white;
+  font-family: sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 h1, h2, h3 {
   color: white;
+  font-family: monospace;
+  font-size:20px;
 }
 p {
   color: white;
@@ -17,6 +23,7 @@ p {
   margin-left: 5px;
   width: 35px;
   height:29px;
+  margin-right: 5px;
 }
 
 #collection_symbol_text {
@@ -71,7 +78,7 @@ img {
 
 #collection {
   margin-left: 2px;
-  width:350px;
+  width:550px;
   padding: 6px;
   border: none;
   font-size: 14px;
@@ -191,9 +198,49 @@ img {
 }
 
 .search_bar_container {
-  margin-left: 50px
+  margin-left: 50px;
+
 }
+
+#search_bar_title, #search_bar_container_child {
+  display:flex;
+  justify-content: center;
+}
+
 
 #loading_wheel {
   margin-left:3px;
+}
+
+.footer {
+  display:flex;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-top: auto;
+  justify-content: center;
+}
+
+#footer_title {
+  font-weight: bold;
+  font-size:14px;
+  padding-bottom: 3px;
+}
+
+#left-footer {
+  display:flex;
+  flex-direction:row;
+  align-items: center;
+  margin-left: 50px;
+}
+
+#right-footer {
+  margin-right: 50px;
+}
+
+#footer_logo {
+  margin-right: 6px;
 }
